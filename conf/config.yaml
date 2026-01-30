@@ -1,6 +1,2 @@
 defaults:
-  - model: rf
-
-dataset:
-  test_size: 0.2
-  random_state: 42
+  - _self_
