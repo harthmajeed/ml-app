@@ -16,6 +16,12 @@ cat > pyproject.toml <<'PYPROJECT'
 [build-system]
 requires = ["setuptools", "wheel"]
 build-backend = "setuptools.build_meta"
+
+[project]
+name = "ml-docker-demo"
+version = "0.1"
+description = "Simple ML training on Docker demo"
+dependencies = ["pyyaml"]
 PYPROJECT
 
 # requirements.txt
@@ -72,8 +78,8 @@ chmod +x entrypoint.sh
 cat > Dockerfile <<'DOCK'
 FROM python:3.10-slim
 WORKDIR /app
-COPY pyproject.toml requirements.txt ./
-RUN pip install --no-cache-dir -r requirements.txt
+COPY pyproject.toml ./
+RUN pip install --no-cache-dir .
 COPY . /app
 RUN chmod +x /app/entrypoint.sh
 ENTRYPOINT ["/app/entrypoint.sh"]
