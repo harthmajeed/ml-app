@@ -1,5 +1,7 @@
-IMAGE=ml-train:local
 build:
-	docker build -t $(IMAGE) .
+	docker compose build
 train:
-	docker run --rm -v $(CURDIR)/data:/app/data -v $(CURDIR)/artifacts:/app/artifacts $(IMAGE)
+	docker compose up
+	
+#docker compose up --build
+#Builds if needed and starts the training container
