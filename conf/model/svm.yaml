@@ -1,4 +1,0 @@
-name: svm
-kernel: rbf
-C: 1.0
-gamma: scale

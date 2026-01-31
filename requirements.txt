@@ -1,7 +1,2 @@
-mlflow
-scikit-learn
-pandas
-joblib
-hydra-core
-omegaconf
-dataclasses
+numpy
+PyYAML
