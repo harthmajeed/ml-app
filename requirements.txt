@@ -1,7 +1,29 @@
-pandas
-scikit-learn
-joblib
-pyyaml
-dvc
-dask[distributed]
-bokeh
+# THIS IS TO MATCH CLIENT TO DOCKER IMAGES
+# +-------------+----------------+-----------------+-----------------+
+# | Package     | Client         | Scheduler       | Workers         |
+# +-------------+----------------+-----------------+-----------------+
+# | dask        | 2026.1.2       | 2026.1.1        | 2026.1.1        |
+# | distributed | 2026.1.2       | 2026.1.1        | 2026.1.1        |
+# | lz4         | None           | 4.4.5           | 4.4.5           |
+# | numpy       | 2.4.1          | 2.2.6           | 2.2.6           |
+# | python      | 3.13.9.final.0 | 3.10.19.final.0 | 3.10.19.final.0 |
+# +-------------+----------------+-----------------+-----------------+
+#   warnings.warn(version_module.VersionMismatchWarning(msg[0]["warning"]))
+# install pyenv if you don't have it, then:
+# pyenv install 3.10.19
+# pyenv local 3.10.19   # sets local directory Python
+# python3.10 -m venv .venv
+
+dask==2026.1.1
+distributed==2026.1.1
+cloudpickle==3.1.2
+lz4==4.4.5
+numpy==2.2.6
+
+# # This is for making the docker image match the client
+# NO LONGER NEEDED - DOCKERFILE COULD NOT BUILD THE IMAGE NEEDED
+# dask==2026.1.2
+# distributed==2026.1.2
+# cloudpickle==3.1.2
+# lz4==4.4.5
+# numpy==2.4.1
