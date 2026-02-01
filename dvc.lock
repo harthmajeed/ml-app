@@ -1,0 +1,74 @@
+schema: '2.0'
+stages:
+  ingest:
+    cmd: python src/ingest.py
+    deps:
+    - path: src/ingest.py
+      hash: md5
+      md5: e5a267197337117df26ef10a7355af7a
+      size: 245
+    outs:
+    - path: data/raw.csv
+      hash: md5
+      md5: 2b5c50ac4a98929a6e4bd211c0a377e7
+      size: 37
+  preprocess:
+    cmd: python src/preprocess.py
+    deps:
+    - path: data/raw.csv
+      hash: md5
+      md5: 2b5c50ac4a98929a6e4bd211c0a377e7
+      size: 37
+    - path: src/preprocess.py
+      hash: md5
+      md5: 3fba8105752406db52fd87253aaa0310
+      size: 191
+    outs:
+    - path: data/processed.csv
+      hash: md5
+      md5: 190df28ad65298175db024e69f3ac9a3
+      size: 55
+  train:
+    cmd: python src/train.py
+    deps:
+    - path: data/processed.csv
+      hash: md5
+      md5: 190df28ad65298175db024e69f3ac9a3
+      size: 55
+    - path: params.yaml
+      hash: md5
+      md5: a33ecdcc047329ec0d254371556a237e
+      size: 125
+    - path: src/train.py
+      hash: md5
+      md5: 10146498155e38d1c4febf141f1ffcf2
+      size: 898
+    params:
+      params.yaml:
+        train.n_estimators: 10
+        train.random_state: 42
+    outs:
+    - path: metrics/training_metrics.txt
+      hash: md5
+      md5: f43727a520f7a1377b634d8cdea4fefc
+      size: 51
+    - path: model.joblib
+      hash: md5
+      md5: 66a29eafd5706bddbec464718838f04c
+      size: 10145
+  evaluate:
+    cmd: python src/evaluate.py
+    deps:
+    - path: model.joblib
+      hash: md5
+      md5: 66a29eafd5706bddbec464718838f04c
+      size: 10145
+    - path: src/evaluate.py
+      hash: md5
+      md5: aa6bd28c1ab0eac42f4a6e8f6a21c5b5
+      size: 536
+    outs:
+    - path: metrics/evaluation_metrics.txt
+      hash: md5
+      md5: a9bed14616e28227aa8eb26c0821684f
+      size: 52

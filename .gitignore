@@ -2,3 +2,6 @@
 __pycache__/
 artifacts/
 mlruns/
+/model.joblib
+/training_metrics.txt
+/evaluation_metrics.txt
