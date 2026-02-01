@@ -1,7 +1,0 @@
-data:
-  raw: data/raw.csv
-  processed: data/processed.csv
-train:
-  test_size: 0.2
-  random_state: 42
-  n_estimators: 10
