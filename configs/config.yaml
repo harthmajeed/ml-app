@@ -1,6 +1,6 @@
 paths:
-  data_path: ../../data/train.csv
-  model_out: ../../models/model.joblib
+  data_path: data/train.csv
+  model_out: models/model.joblib
 
 mlflow:
   experiment_name: "mlops-demo"

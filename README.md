@@ -6,3 +6,4 @@
 * Project 5.1 - v0.5.1 - Simple Local Dask Cluster
 * Project 5.2 - v0.5.2 - Docker Compose -> Dask Cluster N Workers
 * Project 6 - v0.6 - Drift Detector
+* Project 7 - v0.7 - Putting it together (follow makefile to run)

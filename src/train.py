@@ -1,8 +1,12 @@
-import os, hydra, mlflow, joblib, pandas
-from dataclasses import dataclass
-from omegaconf import DictConfig
-from sklearn.ensemble import RandomForestClassifier
-from sklearn.model_selection import train_test_split
+import os 
+from dataclasses import dataclass 
+import hydra 
+from omegaconf import DictConfig 
+import mlflow 
+import joblib 
+import pandas as pd 
+from sklearn.ensemble import RandomForestClassifier 
+from sklearn.model_selection import train_test_split 
 from sklearn.metrics import accuracy_score
 
 @dataclass
@@ -10,8 +14,9 @@ class Paths:
     data_path: str = "data/train.csv"
     model_out: str = "models/model.joblib"
 
-@hydra.main(config_path="../configs", config_name="config")
+@hydra.main(config_path="../configs", config_name="config", version_base=None)
 def main(cfg: DictConfig):
+    print(f"----- {cfg} -----")
     paths = Paths(**cfg.paths)
     mlflow.set_experiment(cfg.mlflow.experiment_name)
     with mlflow.start_run():

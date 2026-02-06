@@ -4,7 +4,7 @@ import pandas as pd
 from pydantic import BaseModel
 
 class Input(BaseModel):
-    features: List
+    features: list
 
 app = FastAPI()
 MODEL_PATH = "models/model.joblib"
