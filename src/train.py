@@ -1,45 +1,40 @@
-import os 
-from dataclasses import dataclass 
-import hydra 
-from omegaconf import DictConfig 
-import mlflow 
-import joblib 
-import pandas as pd 
-from sklearn.ensemble import RandomForestClassifier 
-from sklearn.model_selection import train_test_split 
-from sklearn.metrics import accuracy_score
+import pandas as pd
+import joblib
+from sklearn.linear_model import Ridge
+from sklearn.metrics import mean_absolute_error, mean_squared_error
+from features import make_supervised
 
-@dataclass
-class Paths:
-    data_path: str = "data/train.csv"
-    model_out: str = "models/model.joblib"
+DATA_PATH = "data/passengers.csv"
+MODEL_PATH = "models/ridge.joblib"
 
-@hydra.main(config_path="../configs", config_name="config", version_base=None)
-def main(cfg: DictConfig):
-    print(f"----- {cfg} -----")
-    paths = Paths(**cfg.paths)
-    mlflow.set_experiment(cfg.mlflow.experiment_name)
-    with mlflow.start_run():
-        df = pd.read_csv(paths.data_path)
-        X = df.drop(cfg.target_col, axis=1)
-        Y = df[cfg.target_col]
-        X_train, X_val, Y_train, Y_val = train_test_split(
-            X, Y,
-            test_size = cfg.train.test_size,
-            random_state = cfg.train.seed)
+def main():
+    df = pd.read_csv(DATA_PATH)
 
-        model = RandomForestClassifier(
-            n_estimators = cfg.model.n_estimators,
-            random_state = cfg.train.seed)
-        model.fit(X_train, Y_train)
-        preds = model.predict(X_val)
-        acc = accuracy_score(Y_val, preds)
-        mlflow.log_metric("val_accuracy", float(acc))
-        
-        os.makedirs(os.path.dirname(paths.model_out), exist_ok=True)
-        joblib.dump(model, paths.model_out)
-        mlflow.log_artifact(paths.model_out, artifact_path="model")
-        print("Training done. Val accuracy: ", acc)
+    X, Y, meta, feature_cols = make_supervised(df, max_lag=14)
+
+    split_idx = int(len(X) * 0.8)
+    X_train, X_val = X.iloc[:split_idx], X.iloc[split_idx:]
+    Y_train, Y_val = Y.iloc[:split_idx], Y.iloc[split_idx:]
+
+    model = Ridge(alpha = 1.0)
+    model.fit(X_train, Y_train)
+
+    preds = model.predict(X_val)
+
+    mae = mean_absolute_error(Y_val, preds)
+    rmse = mean_squared_error(Y_val, preds)
+
+    print(f"VAL_MAE: {mae:.2f}")
+    print(f"VAL_RMSE: {rmse:.2f}")
+
+    joblib.dump(
+        {
+            "model": model,
+            "feature_cols": feature_cols
+        },
+        MODEL_PATH,
+    )
+    print(f"Saved model to '{MODEL_PATH}'")
 
 if __name__ == "__main__":
     main()
