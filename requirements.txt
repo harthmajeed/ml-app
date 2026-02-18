@@ -8,3 +8,5 @@ uvicorn
 numpy
 pydantic
 features
+matplotlib
+statsmodels
